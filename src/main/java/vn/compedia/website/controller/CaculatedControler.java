@@ -127,4 +127,32 @@ public class CaculatedControler implements Serializable {
 
         return calculations ;
     }
+
+    public double onCalOneMonth(){
+        calculations = new ArrayList<>();
+        double gocTraHangThang = sotienVay/sothangVay;
+        double tam = sotienVay;
+        Calendar start = Calendar.getInstance();
+        start.setTime(ngayGiaiNgan);
+
+            Calculation calculation = new Calculation();
+            //ky han
+            calculation.setPeriod(String.valueOf(1));
+            //cac thang dong lai
+            start.add(Calendar.MONTH,1);
+            calculation.setPaymentDate(start.getTime());
+            //lai tra hang thang
+            double profitPerMonth = (tam*(profit/100)*30)/360;
+            calculation.setProfitPerMonth(profitPerMonth);
+            //so goc con lai
+            tam -= gocTraHangThang;
+            calculation.setRemain(tam);
+            //goc tra hang thang
+            calculation.setMoneyPerMonth(gocTraHangThang);
+            //tong so tien phai tra hang thang
+            double sum = gocTraHangThang+profitPerMonth;
+            calculation.setAmountPerMonth(sum);
+
+        return calculation.getRemain() ;
+    }
 }

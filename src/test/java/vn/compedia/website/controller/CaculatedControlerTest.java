@@ -54,4 +54,21 @@ public class CaculatedControlerTest {
         Assert.assertEquals("Fail", check,"false");
 
     }
+
+    @Test
+    public void onSearchOneMonth() {
+        Calculation calculationBefore = new Calculation("aaa",new Date(2020,01,01),30000000,1000000,0.07,12365);
+        Calculation calculationAfter = new Calculation("aaa",new Date(2020,02,01),30000000,1000000,0.07,12365);
+        List<Calculation> list = new ArrayList<>();
+        list.add(calculationBefore);
+        list.add(calculationAfter);
+        caculatedControler.setCalculations(list);
+        caculatedControler.setNgayGiaiNgan(new Date(2020,01,01));
+        caculatedControler.setSothangVay(12);
+        caculatedControler.setSotienVay(30000000d);
+        caculatedControler.setProfit(0.07f);
+
+        Assert.assertEquals("Pass", String.valueOf(caculatedControler.onCalOneMonth()),"2.75E7");
+
+    }
 }

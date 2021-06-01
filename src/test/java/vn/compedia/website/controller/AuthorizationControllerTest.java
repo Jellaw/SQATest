@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = AuthorizationController.class)
 public class AuthorizationControllerTest {
     @MockBean
     private MockMvc mockMvc;
