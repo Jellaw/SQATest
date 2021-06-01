@@ -1,0 +1,45 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pa="http://primefaces.org/apollo">
+
+    <div class="layout-menu-container">
+        <div class="nano">
+            <div class="nano-content menu-scroll-content">
+                <div class="layout-menu-title">MENU</div>
+                <h:form id="menuform">
+                    <pa:menu>
+
+                        <p:menuitem  icon="fa fa-home" value="Trang chủ"
+                                    outcome="/dashboard"
+                        />
+                        <p:menuitem id="#{Constant.ID_CUSTOMER}" icon="fa fa-address-book" value="Quản lý khách hàng"
+                                    outcome="/mn_customer"
+                        />
+                        <p:menuitem id="#{Constant.ID_INFORMATION}" icon="fa fa-files-o" value="Quản lý phê duyệt hồ sơ"
+                                    outcome="/mn_Information"
+                        />
+                        <p:menuitem id="#{Constant.ID_LOAN}" icon="fa fa-list" value="Quản lý khoản vay"
+                                    outcome="/mn_loan"
+                        />
+
+                        <p:submenu id="id1" label="Công cụ &amp; Tiện ích" icon="fa fa-cog">
+                            <p:menuitem id="id11" value="Tỷ giá" icon="fa fa-bank"/>
+                            <p:menuitem id="id12" value="Lãi xuất " icon="fa fa-percent"
+                            outcome="/dashboard"
+                            />
+                            <p:menuitem id="id13" value="Biểu phí" icon="fa fa-money"/>
+                            <p:menuitem id="id14" value="Biểu mẫu" icon="fa fa-align-center"/>
+                        </p:submenu>
+                    </pa:menu>
+                </h:form>
+
+                <div class="layout-menu-footer"></div>
+            </div>
+        </div>
+    </div>
+
+
+</ui:composition>

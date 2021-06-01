@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<p:importConstants type="vn.compedia.website.util.Constant" var="Constant"/>
+
+<f:metadata>
+    <f:event type="preRenderView" listener="#{authorizationController.init}"/>
+</f:metadata>
+
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+    </f:facet>
+    <title>Data Sponsor</title>
+</h:head>
+
+<h:body styleClass="login-body">
+    <div class="body-container">
+        <div class="ui-g">
+            <div class="ui-g-12 ui-lg-6 left-side">
+                <p:graphicImage name="images/logo-white.png" library="apollo-layout" styleClass="logo"/>
+                <h1>Welcome</h1>
+                <p>
+                    Đăng nhập vào hệ thống
+                </p>
+            </div>
+            <div class="ui-g-12 ui-lg-6 right-side">
+                <h:form prependId="false">
+                    <p:growl id="growl" keepAlive="500"/>
+                    <div class="login-wrapper">
+                        <div class="login-container">
+                            <span class="title">Đăng nhập</span>
+
+                            <div class="ui-g ui-fluid">
+                                <div class="ui-g-12">
+                                    <p:inputText placeholder="Tài khoản" autocomplete="off" value="#{authorizationController.employee.username}" />
+                                </div>
+                                <div class="ui-g-12">
+                                    <p:password placeholder="Mật khẩu" autocomplete="off" feedback="false" value="#{authorizationController.employee.password}" />
+                                </div>
+                                <div class="ui-g-4" >
+                                    <p:commandButton  update="growl" actionListener="#{authorizationController.login}"
+                                                     outcome="dashboard" value="Đăng nhập" icon="fa fa-check"/>
+                                </div>
+                                <div class="ui-g-5 password-container">
+                                    <p:commandLink value="Quên mật khẩu?" style="float: right" onclick="PF('forgotPassword').show();" update="forgotForm"/>
+                                </div>
+                                <div class="ui-g-3 regist-container">
+                                    <p:commandLink value="Đăng ký?" style="float: right" onclick="PF('addUser').show();"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </div>
+
+    <p:dialog header="Quên mật khẩu" widgetVar="forgotPassword" responsive="true" showEffect="clip" hideEffect="clip" modal="true" width="500">
+        <p:scrollPanel mode="native" style="width: 100%; max-height: 400px; border: none">
+            <h:form id="forgotForm">
+                <div class="ui-fluid">
+                    <p:focus for="forgotAccountE"/>
+                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid"
+                                 style="margin-top: 4px"
+                                 columnClasses="ui-grid-col-3, ui-grid-col-9">
+                        <p:outputLabel value="Địa chỉ email:" styleClass="requireLabel"/>
+                        <p:inputText id="forgotAccountE" placeholder="Nhập địa chỉ email"
+                                     autocomplete="off"/>
+                    </p:panelGrid>
+
+                    <p:outputPanel styleClass="default-title">
+                        <p:commandButton value="Lấy lại mật khẩu"
+                                         styleClass="default-button"
+                                         style="width: auto; margin-right: 10px; margin-top: 4px;"
+                                         icon="fa fa-send-o"/>
+
+                        <p:commandButton value="Quay lại"
+                                         oncomplete="PF('forgotPassword').hide();"
+                                         style="width: auto; margin-top: 4px; background-color: #7a7a7a"
+                                         icon="fa fa-reply"
+                                         styleClass="ui-panelgrid-blank"/>
+                    </p:outputPanel>
+                </div>
+            </h:form>
+        </p:scrollPanel>
+    </p:dialog>
+
+    <p:dialog header="Đăng ký thành viên" widgetVar="addUser" modal="true" width="1100px">
+        <div class="ui-g-12 ui-fluid">
+            <h:form id="addAccountForm" prependId="false">
+                <p:panelGrid columns="4" columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+                             styleClass="ui-panelgrid-blank" layout="grid">
+
+
+                    <p:outputLabel value="Họ và tên" styleClass="required"/>
+                    <p:inputText placeholder="Nhập họ và tên"
+                                 value="#{authorizationController.newEmployee.name}"
+                                />
+
+
+                    <p:outputLabel value="Giới tính" styleClass="required"/>
+                    <h:selectOneRadio value="#{authorizationController.newEmployee.gender}" >
+                        <f:selectItem itemValue="male" itemLabel="male"/>
+                        <f:selectItem itemValue="female" itemLabel="female"/>
+                        <f:selectItem itemValue="other" itemLabel="other"/>
+                    </h:selectOneRadio>
+
+                    <p:outputLabel value="Mã nhân viên" styleClass="required"/>
+                    <p:inputText placeholder="Nhập mã nhân viên"
+                                 value="#{authorizationController.newEmployee.ECode}"
+                                 />
+
+                    <p:outputLabel value="Ngày sinh" styleClass="required"/>
+                    <p:calendar pattern="dd/MM/yyyy" placeholder="Chọn ngày sinh" value="#{authorizationController.newEmployee.dob}"/>
+
+                    <p:outputLabel value="Tên đăng nhập" styleClass="required"/>
+                    <p:inputText placeholder="Nhập tên đăng nhập"
+                                 value="#{authorizationController.newEmployee.username}"
+                    />
+
+                    <p:outputLabel value="Mật khẩu " styleClass="required"/>
+                    <p:password placeholder="Nhập password"
+                                value="#{authorizationController.password1}"
+                    />
+                </p:panelGrid>
+
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-4"
+                             styleClass="ui-panelgrid-blank" layout="grid">
+                    <p:outputLabel value="Nhập lại mật khẩu " styleClass="required"/>
+                    <p:password placeholder="Nhập password"
+                                value="#{authorizationController.rePassword}"
+                    />
+                </p:panelGrid>
+
+                <p:panelGrid columns="4" columnClasses="ui-grid-col-2, ui-grid-col-3,ui-grid-col-3,ui-grid-col-4 "
+                             styleClass="ui-panelgrid-blank" layout="grid">
+                    <p:outputLabel value="Địa chỉ" styleClass="required"/>
+                    <p:selectOneMenu>
+
+                        <f:selectItem itemLabel="Tỉnh/TP" itemValue=""/>
+
+                    </p:selectOneMenu>
+
+                    <p:selectOneMenu id="disList" >
+                        <f:selectItem itemLabel="Tỉnh/TP" itemValue=""/>
+                    </p:selectOneMenu>
+                    <p:selectOneMenu id="vilList" >
+                        <f:selectItem itemLabel="Tỉnh/TP" itemValue=""/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-10 "
+                             styleClass="ui-panelgrid-blank" layout="grid" id="setAdd">
+                    <p:outputLabel value=""/>
+                    <p:inputText placeholder="Nhập địa chỉ"
+                                 value="#{authorizationController.newEmployee.address}"
+                                />
+                </p:panelGrid>
+
+                <p:panelGrid columns="4" columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+                             styleClass="ui-panelgrid-blank" layout="grid">
+
+                    <p:outputLabel value="Trạng thái" styleClass="required"/>
+                    <p:selectOneMenu  value="#{authorizationController.newEmployee.status}">
+                        <f:selectItem itemLabel="Chọn trạng thái" itemValue=""/>
+                        <f:selectItem itemValue="#{Constant.STATUS_ACTIVE}" itemLabel="Hoạt động"/>
+                        <f:selectItem itemValue="#{Constant.STATUS_INACTIVE}" itemLabel="Không hoạt động"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Nhóm quyền" styleClass="required" />
+                    <p:selectOneMenu value="#{authorizationController.newEmployee.permission}">
+                        <f:selectItem itemLabel="Chọn nhóm quyền" itemValue=""/>
+                        <f:selectItem itemValue="#{Constant.ADMINISTRATOR}" itemLabel="Quản trị viên"/>
+                        <f:selectItem itemValue="#{Constant.STAFF}" itemLabel="Nhân viên"/>
+                        <f:selectItem itemValue="#{Constant.CUSTOMER}" itemLabel="Khách Hàng"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Điện thoại" styleClass="required"/>
+                    <p:inputText placeholder="Nhập số điện thoại"
+                                 value="#{authorizationController.newEmployee.phone}"
+                                />
+
+                    <p:outputLabel value="Email" styleClass="required"/>
+                    <p:inputText placeholder="Nhập địa chỉ Email"
+                                 value="#{authorizationController.newEmployee.email}"
+                                />
+
+
+                </p:panelGrid>
+                <p:commandButton icon="fa fa-plus" value="Lưu thông tin"
+                                 style="width: auto; margin-right: 10px"
+                                 update="growl"
+                                 actionListener="#{authorizationController.onSave()}"
+                />
+                <p:commandButton icon="fa fa-close" value="Đóng"
+                                 styleClass="close"
+                                 oncomplete="PF('addUser').hide()"
+                                 style="width: auto" />
+
+            </h:form>
+        </div>
+    </p:dialog>
+    <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="apollo-layout"/>
+</h:body>
+
+</html>

@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/template/template.xhtml">
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{caculatedControler.init}"></f:event>
+    </f:metadata>
+
+    <ui:define name="breadcrumb">
+        <li><p:link outcome="/dashboard">Công cụ tính lãi</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:outputPanel>
+            <h:form id="searchForm" prependId="false">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card" style="margin-top: 0">
+
+                                <p:panel header="Tìm kiếm" style="margin-bottom: 10px;">
+
+                                    <p:panelGrid columns="4"
+                                                 columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+                                                 styleClass="ui-panelgrid-blank" layout="grid">
+
+                                        <p:outputLabel value="Số tiền vay VND :"/>
+                                        <p:inputNumber placeholder="6.000.000" value="#{caculatedControler.sotienVay}"/>
+
+                                        <p:outputLabel value="Số tháng vay :"/>
+                                        <p:inputNumber placeholder="12" value="#{caculatedControler.sothangVay}"/>
+
+                                        <p:outputLabel value="Lãi xuất % năm :"/>
+                                        <p:inputNumber placeholder="7" value="#{caculatedControler.profit}"/>
+
+                                        <p:outputLabel value="Ngày giải ngân :"/>
+                                        <p:datePicker placeholder="1/1/2021" value="#{caculatedControler.ngayGiaiNgan}"/>
+
+                                    </p:panelGrid>
+
+                                    <p:commandButton icon="fa fa-search" value="Tìm kiếm" update="searchResult"
+                                                     style="width: auto; margin-right: 10px" id="search"
+                                                     actionListener="#{caculatedControler.onSearch()}"
+                                    />
+                                    <p:commandButton icon="fa fa-refresh" value="Làm mới" update="tblSearchResult"
+                                                     style="width: auto; margin-top: 20px; margin-left: 5px" id="refresh"
+                                                     actionListener="#{caculatedControler.refresh()}"
+                                    />
+
+                                </p:panel>
+
+                                <p:panel id="searchResult" header="Kết quả ">
+                                    <p:dataTable var="resultDto"
+                                                 paginatorPosition="top" widgetVar="resultDto"
+                                                 value="#{caculatedControler.calculations}"
+                                                 id="tblSearchResult" lazy="true"
+                                                 rowKey="#{resultDto.period}">
+                                        >
+
+                                        <p:column headerText="Kỳ hạn" style="text-align: center" width="40">
+                                            <p:outputLabel value="#{resultDto.period}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Ngày trả nợ" style="text-align: center" >
+                                            <p:outputLabel value="#{resultDto.paymentDate}" >
+                                              <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </p:outputLabel>
+                                        </p:column>
+
+                                        <p:column headerText="Số gốc còn lại"   >
+                                            <h:outputText value="#{resultDto.remain}">
+                                                <f:convertNumber type="number" pattern="###,### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+
+
+
+
+                                        <p:column headerText="Gốc trả hàng tháng"  >
+                                            <h:outputText value="#{resultDto.moneyPerMonth}">
+                                                <f:convertNumber type="number" pattern="###,### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="Lãi trả hàng tháng"  >
+                                            <h:outputText value="#{resultDto.profitPerMonth}">
+                                                <f:convertNumber type="number" pattern="###,### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="Tổng số tiền phải trả hàng tháng"  >
+                                            <h:outputText value="#{resultDto.amountPerMonth}">
+                                                <f:convertNumber type="number" pattern="###,### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </p:panel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </p:outputPanel>
+
+    </ui:define>
+
+
+
+
+</ui:composition>

@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/template.xhtml">
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{informationController.init}"/>
+    </f:metadata>
+
+    <ui:define name="breadcrumb">
+        <li><p:link outcome="/mn_Information">Danh sách phê duyệt </p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <p:outputPanel>
+            <h:form id="searchForm" prependId="false">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card" style="margin-top: 0">
+                                <p:panel header="Tìm kiếm" style="margin-bottom: 10px;">
+
+                                    <p:panelGrid columns="4"
+                                                 columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+                                                 styleClass="ui-panelgrid-blank" layout="grid">
+
+                                        <p:outputLabel value="Từ khóa tìm kiếm :"/>
+                                        <p:inputText placeholder="Nhập tên, sđt, email, id, ..."
+                                                     value="#{informationController.searchDto.keyword}"
+                                        />
+                                        <p:outputLabel value="Loại tài khoản:" styleClass="required"/>
+                                        <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                         effect="fade" autoWidth="true"  value="#{informationController.searchDto.type}">
+                                            <f:selectItem itemLabel="Chọn loại tài khoản" itemValue=""/>
+                                            <f:selectItem  itemValue="#{Constant.ACCOUNT_TIEU_DUNG}" itemLabel="Tiêu dùng" />
+                                            <f:selectItem  itemValue="#{Constant.ACCOUNT_SINH_VIEN}" itemLabel="Sinh viên" />
+                                            <f:selectItem  itemValue="#{Constant.ACCOUNT_THE_CHAP}" itemLabel="Vay thế chấp" />
+                                            <f:selectItem  itemValue="#{Constant.ACCOUNT_TIN_DUNG}" itemLabel="Vay tín dụng" />
+                                        </p:selectOneMenu>
+
+                                    </p:panelGrid>
+
+                                    <p:commandButton icon="fa fa-search" value="Tìm kiếm" update="searchResult"
+                                                     style="width: auto; margin-right: 10px" id="search"
+                                                     actionListener="#{informationController.onSearch()}"
+                                    />
+                                    <p:commandButton icon="fa fa-refresh" value="Làm mới" update="tblSearchResult"
+                                                     style="width: auto; margin-top: 20px; margin-left: 5px" id="refresh"
+                                    actionListener="#{informationController.refresh()}" />
+                                </p:panel>
+
+                                <p:panel id="searchResult" header="Kết quả tìm kiếm">
+                                    <p:dataTable var="resultDto" paginator="true" rows="10"
+                                                 paginatorPosition="top" widgetVar="resultDto"
+                                                 value="#{informationController.lazyDataModel}"
+                                                 tableStyle="table-layout: auto;" resizableColumns="true"
+                                                 reflow="true" pageLinks="5" paginatorAlwaysVisible="true"
+                                                 paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,20,50,100" selectionMode="single"
+                                                 id="tblSearchResult" lazy="true"
+                                                 currentPageReportTemplate="Tổng số bản ghi: #{informationController.lazyDataModel.rowCount} "
+                                                 emptyMessage="Không có bản ghi nào" rowIndexVar="rowIndex"
+                                                 rowKey="#{resultDto.id}">
+
+                                        <p:column headerText="STT" style="text-align: center" width="20">
+                                            <p:outputLabel value="#{rowIndex + 1}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Họ và tên" sortBy="#{resultDto.name}">
+                                            <p:outputLabel value="#{resultDto.name}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Ngày sinh" style="text-align: center" sortBy="#{resultDto.dob}">
+                                            <p:outputLabel value="#{resultDto.dob}" >
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </p:outputLabel>
+                                        </p:column>
+
+                                        <p:column headerText="Số điện thoại" sortBy="#{resultDto.phone}">
+                                            <p:outputLabel value="#{resultDto.phone}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Email" sortBy="#{resultDto.email}">
+                                            <p:outputLabel value="#{resultDto.email}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Địa chỉ" sortBy="#{resultDto.address}">
+                                            <p:outputLabel value="#{resultDto.address}"/>
+                                        </p:column>
+
+                                        <p:column headerText="CMT/CCCD" sortBy="#{resultDto.idCard}">
+                                            <p:outputLabel value="#{resultDto.idCard}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Loại tài khoản" sortBy="#{resultDto.type}">
+                                            <p:outputLabel value="#{resultDto.type}"/>
+                                        </p:column>
+                                        <p:column headerText="Nghề nghiệp" sortBy="#{resultDto.job}">
+                                            <p:outputLabel value="#{resultDto.job}"/>
+                                        </p:column>
+                                        <p:column headerText="Thu nhập" sortBy="#{resultDto.income}">
+                                            <h:outputText value="#{resultDto.amount}">
+                                                <f:convertNumber type="number" pattern="###,###,###.### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Công ty" sortBy="#{resultDto.companyName}">
+                                            <p:outputLabel value="#{resultDto.companyName}"/>
+                                        </p:column>
+                                        <p:column headerText="Khoản vay" sortBy="#{resultDto.amount}">
+                                            <h:outputText value="#{resultDto.amount}">
+                                                <f:convertNumber type="number" pattern="###,###,###.### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Lãi xuất(%/tháng)" sortBy="#{resultDto.bankRate}" >
+                                            <p:outputLabel value="#{resultDto.bankRate}"/>
+                                        </p:column>
+                                        <p:column headerText="Số tháng" sortBy="#{resultDto.numberOfMonth}" >
+                                            <p:outputLabel value="#{resultDto.numberOfMonth}"/>
+                                        </p:column>
+                                        <p:column headerText="Mục đích" sortBy="#{resultDto.purpose}">
+                                            <p:outputLabel value="#{resultDto.purpose}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Duyệt" width="40" style="text-align: center">
+                                            <div class="my-data-table">
+                                                <p:commandLink styleClass="edit-table"
+                                                               actionListener="#{informationController.onSaveCusandLoan(resultDto)}"
+                                                               update="searchForm"
+                                                >
+                                                    <p:confirm header="Phê duyệt" message="Bạn chắc chắn phê duyệt hợp đồng này?"
+                                                               icon="fa fa-question-circle"/>
+                                                    <i class="fa fa-check"/>
+                                                </p:commandLink>
+                                            </div>
+                                        </p:column>
+                                        <p:column headerText="Xóa" width="40" style="text-align: center">
+                                            <div class="my-data-table">
+                                                <p:commandLink styleClass="delete-table"
+                                                               actionListener="#{informationController.onDelete(resultDto)}">
+                                                    <p:confirm header="Xác nhận xóa" message="Bạn chắc chắn muốn xóa?"
+                                                               icon="fa fa-question-circle"/>
+                                                    <i class="fa fa-trash-o"/>
+                                                </p:commandLink>
+                                            </div>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </p:panel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </p:outputPanel>
+    </ui:define>
+
+
+</ui:composition>

@@ -1,0 +1,286 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/template.xhtml">
+
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{customerController.init}"/>
+    </f:metadata>
+
+    <ui:define name="breadcrumb">
+        <li><p:link outcome="/mn_customer">Quản lý khách hàng</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-fluid">
+            <p:dialog header="Thêm mới khách hàng" widgetVar="addCustomer" modal="true" width="800">
+                <h:form id="mainForm" prependId="false">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-10"
+                                 styleClass="ui-panelgrid-blank" layout="grid">
+
+                        <p:outputLabel value="Họ và tên:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập tên nhân viên" maxlength="50"
+                                     value="#{customerController.customer.name}"
+                                    />
+
+                        <p:outputLabel value="Ngày sinh:" styleClass="required"/>
+                        <p:calendar
+                                    pattern="dd/MM/yyyy" placeholder="Chọn ngày sinh"
+                                    value="#{customerController.customer.dob}"
+                        />
+
+                        <p:outputLabel value="Số điện thoại:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập số điện thoại" maxlength="50"
+                                     value="#{customerController.customer.phone}"
+                                   />
+
+                        <p:outputLabel value="Email:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập email" maxlength="50"
+                                     value="#{customerController.customer.email}"
+                                     />
+
+                        <p:outputLabel value="Địa chỉ:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập địa chỉ" maxlength="50"
+                                     value="#{customerController.customer.address}"
+                                     />
+
+                        <p:outputLabel value="CMT/CCCD:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập CMT/CCCD" maxlength="50"
+                                     value="#{customerController.customer.idCard}"
+                        />
+
+                        <p:outputLabel value="Loại tài khoản:" styleClass="required"/>
+                        <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                         effect="fade" autoWidth="true"
+                        >
+                            <f:selectItem itemLabel="Chọn loại tài khoản" itemValue=""/>
+                            <f:selectItem  itemValue="#{Constant.ACCOUNT_TIEU_DUNG}" itemLabel="Tiêu dùng" />
+                            <f:selectItem  itemValue="#{Constant.ACCOUNT_SINH_VIEN}" itemLabel="Sinh viên" />
+                            <f:selectItem  itemValue="#{Constant.ACCOUNT_THE_CHAP}" itemLabel="Vay thế chấp" />
+                            <f:selectItem  itemValue="#{Constant.ACCOUNT_TIN_DUNG}" itemLabel="Vay tín dụng" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+
+                    <p:commandButton icon="fa fa-plus" value="Lưu thông tin"
+                                     style="width: auto; margin-right: 10px"
+                                     actionListener="#{customerController.onSaveCustomer}"
+                                     update="searchForm growl"
+                                     />
+
+                    <p:commandButton icon="fa fa-close" value="Đóng" oncomplete="PF('addEmployee').hide();"
+                                     styleClass="close"
+                                     style="width: auto" update="mainForm"/>
+                </h:form>
+            </p:dialog>
+            <p:dialog header="Khai báo thông tin" widgetVar="Infomation" modal="true" width="1100">
+                <h:form id="infoForm" prependId="false">
+                    <p:panelGrid columns="4" columnClasses="ui-grid-col-2, ui-grid-col-4,ui-grid-col-2, ui-grid-col-4"
+                                 styleClass="ui-panelgrid-blank" layout="grid">
+
+                        <p:outputLabel value="Họ và tên:" styleClass="required" />
+                        <p:inputText placeholder="Nhập tên khách hàng" maxlength="50"
+                                     value="#{customerController.information.name}"
+                        />
+
+                        <p:outputLabel value="Ngày sinh:" styleClass="required"/>
+                        <p:calendar
+                                pattern="dd/MM/yyyy" placeholder="Chọn ngày sinh"
+                                value="#{customerController.information.dob}"/>
+
+                        <p:outputLabel value="Số điện thoại:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập số điện thoại" maxlength="50"
+                                     value="#{customerController.information.phone}"
+                        />
+
+                        <p:outputLabel value="Email:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập email" maxlength="50"
+                                     value="#{customerController.information.email}"
+                        />
+
+                        <p:outputLabel value="Địa chỉ:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập địa chỉ" maxlength="50"
+                                     value="#{customerController.information.address}"
+                        />
+
+                        <p:outputLabel value="CMT/CCCD:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập CMT/CCCD" maxlength="50"
+                                     value="#{customerController.information.idCard}"
+                        />
+
+                        <p:outputLabel value="Loại tài khoản:" styleClass="required"/>
+                        <p:selectOneMenu  value="#{customerController.information.type}">
+                            <f:selectItem itemLabel="Chọn loại tài khoản" itemValue="" />
+                            <f:selectItem  itemValue="#{Constant.ACCOUNT_TIEU_DUNG}" itemLabel="Tiêu dùng" />
+                            <f:selectItem  itemValue="#{Constant.ACCOUNT_SINH_VIEN}" itemLabel="Sinh viên" />
+                            <f:selectItem  itemValue="#{Constant.ACCOUNT_THE_CHAP}" itemLabel="Vay thế chấp" />
+                            <f:selectItem  itemValue="#{Constant.ACCOUNT_TIN_DUNG}" itemLabel="Vay tín dụng" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Nghề nghiệp:" styleClass="required" />
+                        <p:inputText placeholder="Nhập nghề nghiệp" maxlength="200"
+                                     value="#{customerController.information.job}"
+                        />
+
+                        <p:outputLabel value="Thu nhập:" styleClass="required"/>
+                        <p:inputNumber placeholder="Nhập thu nhập" maxlength="200"
+                                     value="#{customerController.information.income}"
+                        />
+
+                        <p:outputLabel value="Công ty:" styleClass="required"/>
+                        <p:inputText placeholder="Nhập tên công ty" maxlength="200"
+                                     value="#{customerController.information.companyName}"
+                        />
+
+                        <p:outputLabel value="Khoản vay:" styleClass="required"/>
+                        <p:inputNumber placeholder="Nhập khoản vay" maxlength="200"
+                                     value="#{customerController.information.amount}"
+                        />
+
+                        <p:outputLabel value="Lãi xuất(%/tháng):" styleClass="required"/>
+                        <p:inputNumber placeholder="Nhập lãi suất" maxlength="50"
+                                     value="#{customerController.information.bankRate}"
+                        />
+
+                        <p:outputLabel value="Mục đích" styleClass="required"/>
+                        <p:inputText placeholder="Nhập mục đích" maxlength="200"
+                                     value="#{customerController.information.purpose}"
+                        />
+
+                        <p:outputLabel value="Số tháng" styleClass="required"/>
+                        <p:inputText placeholder="Nhập số tháng" maxlength="200"
+                                     value="#{customerController.information.numberOfMonth}"
+                        />
+
+                    </p:panelGrid>
+
+                    <p:commandButton icon="fa fa-plus" value="Lưu thông tin"
+                                     update="growl"
+                                     style="width: auto; margin-right: 10px"
+                                     actionListener="#{customerController.onSave}"/>
+
+                    <p:commandButton icon="fa fa-close" value="Đóng" oncomplete="PF('addEmployee').hide();"
+                                     styleClass="close"
+                                     style="width: auto" update="mainForm"/>
+                </h:form>
+            </p:dialog>
+        </div>
+
+        <p:outputPanel>
+            <h:form id="searchForm" prependId="false">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card" style="margin-top: 0">
+<!--                                <p:commandButton icon="fa fa-plus" value="Thêm mới khách hàng"-->
+<!--                                                 style="width: auto; margin-bottom: 10px; margin-right: 10px"-->
+<!--                                                 oncomplete="PF('addCustomer').show();"/>-->
+
+                                <p:commandButton icon="fa fa-plus" value="Khai báo thông tin"
+                                                 style="width: auto; margin-bottom: 10px; margin-right: 10px"
+                                                 oncomplete="PF('Infomation').show();"/>
+                                <p:panel header="Tìm kiếm" style="margin-bottom: 10px;">
+
+                                    <p:panelGrid columns="4"
+                                                 columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+                                                 styleClass="ui-panelgrid-blank" layout="grid">
+
+                                        <p:outputLabel value="Từ khóa tìm kiếm :"/>
+                                        <p:inputText placeholder="Nhập tên, sđt, email, id, ..."
+                                                     value="#{customerController.searchDto.keyword}"
+                                                     />
+                                        <p:outputLabel value="Loại tài khoản:" styleClass="required"/>
+                                        <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                         effect="fade" autoWidth="true"
+                                                         value="#{customerController.searchDto.type}"
+                                        >
+                                            <f:selectItem itemLabel="Chọn loại tài khoản" itemValue=""/>
+                                            <f:selectItem  itemValue="#{Constant.ACCOUNT_TIEU_DUNG}" itemLabel="Tiêu dùng" />
+                                            <f:selectItem  itemValue="#{Constant.ACCOUNT_SINH_VIEN}" itemLabel="Sinh viên" />
+                                            <f:selectItem  itemValue="#{Constant.ACCOUNT_THE_CHAP}" itemLabel="Vay thế chấp" />
+                                            <f:selectItem  itemValue="#{Constant.ACCOUNT_TIN_DUNG}" itemLabel="Vay tín dụng" />
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+
+                                    <p:commandButton icon="fa fa-search" value="Tìm kiếm" update="searchResult"
+                                                     style="width: auto; margin-right: 10px" id="search"
+                                                     actionListener="#{customerController.onSearch()}"
+                                                     />
+                                    <p:commandButton icon="fa fa-refresh" value="Làm mới" update="tblSearchResult"
+                                                     style="width: auto; margin-top: 20px; margin-left: 5px" id="refresh" actionListener="#{customerController.refresh()}"/>
+
+                                </p:panel>
+
+                                <p:panel id="searchResult" header="Kết quả tìm kiếm">
+                                    <p:dataTable var="resultDto" paginator="true" rows="10"
+                                                 paginatorPosition="top" widgetVar="resultDto"
+                                                 value="#{customerController.lazyDataModel}"
+                                                 tableStyle="table-layout: auto;" resizableColumns="true"
+                                                 reflow="true" pageLinks="5" paginatorAlwaysVisible="true"
+                                                 paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,20,50,100" selectionMode="single"
+                                                 id="tblSearchResult" lazy="true"
+                                                 currentPageReportTemplate="Tổng số bản ghi:#{customerController.lazyDataModel.rowCount}"
+                                                 emptyMessage="Không có bản ghi nào" rowIndexVar="rowIndex"
+                                                 rowKey="#{resultDto.id}">
+                                    >
+
+                                        <p:column headerText="STT" style="text-align: center" width="20">
+                                            <p:outputLabel value="#{rowIndex + 1}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Họ và tên"   sortBy="#{resultDto.name}" >
+                                            <p:outputLabel  value="#{resultDto.name}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Ngày sinh" style="text-align: center" >
+                                            <p:outputLabel value="#{resultDto.dob}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </p:outputLabel>
+                                        </p:column>
+
+                                        <p:column headerText="Số điện thoại"  sortBy="#{resultDto.phone}">
+                                            <p:outputLabel value="#{resultDto.phone}" />
+                                        </p:column>
+
+                                        <p:column headerText="Email" sortBy="#{resultDto.email}" >
+                                            <p:outputLabel value="#{resultDto.email}" />
+                                        </p:column>
+
+                                        <p:column headerText="Địa chỉ"  sortBy="#{resultDto.address}">
+                                            <p:outputLabel  value="#{resultDto.address}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Số tài khoản" sortBy="#{resultDto.idBankCard}">
+                                            <p:outputLabel value="#{customerController.idCardToNumberCard(resultDto.idBankCard)}"/>
+                                        </p:column>
+
+                                        <p:column headerText="CMT/CCCD" sortBy="#{resultDto.idCard}" >
+                                            <p:outputLabel  value="#{resultDto.idCard}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Sửa" width="40" style="text-align: center">
+                                            <div class="my-data-table">
+                                                <p:commandLink styleClass="edit-table"
+                                                               oncomplete="PF('addCustomer').show();"
+                                                               actionListener="#{customerController.onEdit(resultDto)}">
+
+                                                    <i class="fa fa-edit"/>
+                                                </p:commandLink>
+                                            </div>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </p:panel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </p:outputPanel>
+    </ui:define>
+
+
+</ui:composition>

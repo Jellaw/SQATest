@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/template.xhtml">
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{loanController.init}"/>
+    </f:metadata>
+    <ui:define name="breadcrumb">
+        <li><p:link outcome="/mn_loan">Quản lý khoản vay </p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <p:outputPanel>
+            <h:form id="searchForm" prependId="false">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card" style="margin-top: 0">
+                                <p:panel header="Tìm kiếm" style="margin-bottom: 10px;">
+
+                                    <p:panelGrid columns="4"
+                                                 columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+                                                 styleClass="ui-panelgrid-blank" layout="grid">
+
+                                        <p:outputLabel value="Từ khóa tìm kiếm :"/>
+                                        <p:inputText placeholder="Nhập tên, sđt, email, id, ..."
+                                                     value="#{loanController.searchDto.keyword}"
+                                        />
+                                    </p:panelGrid>
+
+                                    <p:commandButton icon="fa fa-search" value="Tìm kiếm" update="searchResult"
+                                                     style="width: auto; margin-right: 10px" id="search"
+                                                     actionListener="#{loanController.onSearch()}"
+                                    />
+                                    <p:commandButton icon="fa fa-refresh" value="Làm mới" update="tblSearchResult"
+                                                     style="width: auto; margin-top: 20px; margin-left: 5px" id="refresh"/>
+                                </p:panel>
+
+                                <p:panel id="searchResult" header="Kết quả tìm kiếm">
+                                    <p:dataTable var="resultDto" paginator="true" rows="10"
+                                                 paginatorPosition="top" widgetVar="resultDto"
+                                                 value="#{loanController.lazyDataModel}"
+                                                 tableStyle="table-layout: auto;" resizableColumns="true"
+                                                 reflow="true" pageLinks="5" paginatorAlwaysVisible="true"
+                                                 paginatorTemplate=" {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,20,50,100" selectionMode="single"
+                                                 id="tblSearchResult" lazy="true"
+                                                 currentPageReportTemplate="Tổng số bản ghi: #{loanController.lazyDataModel.rowCount}"
+                                                 emptyMessage="Không có bản ghi nào" rowIndexVar="rowIndex"
+                                                rowKey="#{resultDto.id}">
+
+                                        <p:column headerText="STT" style="text-align: center" width="20">
+                                            <p:outputLabel value="#{rowIndex + 1}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Mã khoản vay" >
+                                            <p:outputLabel value="#{resultDto.id}" />
+                                        </p:column>
+
+                                        <p:column headerText="Số tiền" >
+                                            <h:outputText value="#{resultDto.amount}">
+                                                <f:convertNumber type="number" pattern="###,###,###.### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="Ngày bắt đầu" style="text-align: center" >
+                                            <p:outputLabel value="#{resultDto.startDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                            </p:outputLabel>
+                                        </p:column>
+
+                                        <p:column headerText="Số tháng" >
+                                            <p:outputLabel value="#{resultDto.month}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Lãi xuất" >
+                                            <p:outputLabel value="#{resultDto.bankRate}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Só tiền phải trả hàng tháng" >
+                                            <h:outputText value="#{resultDto.monthlyProfit}">
+                                                <f:convertNumber type="number" pattern="###,###,###.### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="Số tiền còn nợ" >
+                                            <h:outputText value="#{resultDto.amountRemain}">
+                                                <f:convertNumber type="number" pattern="###,###,###.### VND"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="Người tạo" >
+                                            <p:outputLabel value="#{authorizationController.employee.username}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Nộp tiền" width="40" style="text-align: center">
+                                            <div class="my-data-table">
+                                                <p:commandLink styleClass="edit-table"
+                                                              >
+                                                    <i class="fa fa-check"/>
+                                                </p:commandLink>
+                                            </div>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </p:panel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </p:outputPanel>
+    </ui:define>
+
+
+</ui:composition>
